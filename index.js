@@ -34,7 +34,7 @@ app.get('/api/users', (req, res) => {
 app.post('/api/users/:_id/exercises', (req, res) => {
   const { _id } = req.params;
   const { description, duration, date } = req.body;
-  
+
   const user = users.find(u => u._id === _id);
   if (!user) {
     return res.status(404).json({ error: 'User not found' });
@@ -54,12 +54,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   }
   user.log.push(exercise);
 
-  res.json({
-    username: user.username,
-    _id: user._id,
-    log: user.log,
-    exercise
-  });
+  res.json({ exercise: exercise });
 });
 
 app.get('/api/users/:_id/logs', (req, res) => {
