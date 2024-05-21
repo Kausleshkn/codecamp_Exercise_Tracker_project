@@ -31,6 +31,20 @@ app.get('/api/users', (req, res) => {
   res.json(users);
 });
 
+const checkDate = (date) => {
+  if (!date) {
+      return (new Date(Date.now())).toDateString();
+  } else {
+      const parts = date.split('-');
+      const year = parseInt(parts[0]);
+      const month = parseInt(parts[1]) - 1;
+      const day = parseInt(parts[2]);
+
+      const utcDate = new Date(Date.UTC(year, month, day));
+      return new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000).toDateString();
+  }
+}
+
 app.post('/api/users/:_id/exercises', (req, res) => {
   const { _id } = req.params;
   const { description, duration, date } = req.body;
@@ -45,7 +59,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     username: user.username,
     description,
     duration: parseInt(duration),
-    date: date ? new Date(date).toDateString() : new Date().toDateString(),
+    date: checkDate(date),
     _id: user._id
   };
 
